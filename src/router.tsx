@@ -1,6 +1,7 @@
 import { AuthLoading, Authenticated, Unauthenticated } from 'convex/react'
 import { Navigate, Outlet, createBrowserRouter } from 'react-router'
 import { Layout } from './components/Layout'
+import { RouteError } from './components/RouteError'
 import { Spinner } from './components/Spinner'
 import { CookingPage } from './pages/CookingPage'
 import { NotFound } from './pages/NotFound'
@@ -27,10 +28,11 @@ function RequireAuth() {
 }
 
 export const router = createBrowserRouter([
-  { path: '/sign-in/*', element: <SignInPage /> },
-  { path: '/sign-up/*', element: <SignUpPage /> },
+  { path: '/sign-in/*', element: <SignInPage />, errorElement: <RouteError /> },
+  { path: '/sign-up/*', element: <SignUpPage />, errorElement: <RouteError /> },
   {
     element: <RequireAuth />,
+    errorElement: <RouteError />,
     children: [
       { path: '/receta/:id/cocinar', element: <CookingPage /> },
       {
