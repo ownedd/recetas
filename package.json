@@ -12,7 +12,10 @@
     "lint": "oxlint"
   },
   "dependencies": {
+    "@clerk/localizations": "4.24.8",
     "@clerk/react": "6.18.8",
+    "@fontsource-variable/atkinson-hyperlegible-next": "5.3.0",
+    "@fontsource/young-serif": "5.3.0",
     "convex": "1.50.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
