@@ -1,5 +1,5 @@
 import { AuthLoading, Authenticated, Unauthenticated } from 'convex/react'
-import { Navigate, Outlet, createBrowserRouter } from 'react-router'
+import { Navigate, Outlet, createBrowserRouter, type RouteObject } from 'react-router'
 import { Layout } from './components/Layout'
 import { RouteError } from './components/RouteError'
 import { Spinner } from './components/Spinner'
@@ -8,6 +8,8 @@ import { NotFound } from './pages/NotFound'
 import { RecipeDetailPage } from './pages/RecipeDetailPage'
 import { RecipeEditorPage } from './pages/RecipeEditorPage'
 import { RecipeListPage } from './pages/RecipeListPage'
+import { PrivacyPage } from './pages/legal/PrivacyPage'
+import { TermsPage } from './pages/legal/TermsPage'
 import { SignInPage } from './pages/SignInPage'
 import { SignUpPage } from './pages/SignUpPage'
 
@@ -27,9 +29,12 @@ function RequireAuth() {
   )
 }
 
-export const router = createBrowserRouter([
+export const routes: RouteObject[] = [
   { path: '/sign-in/*', element: <SignInPage />, errorElement: <RouteError /> },
   { path: '/sign-up/*', element: <SignUpPage />, errorElement: <RouteError /> },
+  // Páginas legales: públicas, fuera del login (Google las enlaza desde su pantalla de consentimiento).
+  { path: '/privacidad', element: <PrivacyPage />, errorElement: <RouteError /> },
+  { path: '/terminos', element: <TermsPage />, errorElement: <RouteError /> },
   {
     element: <RequireAuth />,
     errorElement: <RouteError />,
@@ -47,4 +52,6 @@ export const router = createBrowserRouter([
       },
     ],
   },
-])
+]
+
+export const router = createBrowserRouter(routes)

@@ -32,5 +32,6 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['src/test/setup.ts'],
     server: { deps: { inline: ['convex-test'] } },
+    alias: { 'virtual:pwa-register/react': '/src/test/pwa-register-stub.ts' },
   },
 })
