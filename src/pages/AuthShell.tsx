@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Link } from 'react-router'
 import { Icon } from '../components/Icon'
 
 export function AuthShell({ children }: { children: ReactNode }) {
@@ -12,6 +13,14 @@ export function AuthShell({ children }: { children: ReactNode }) {
         <p className="mt-2 text-ink-soft">Tus recetas, en cualquier cocina.</p>
       </div>
       <div className="animate-rise [animation-delay:120ms]">{children}</div>
+      <nav className="flex gap-5 text-sm text-ink-soft">
+        <Link to="/privacidad" className="underline hover:text-ink">
+          Privacidad
+        </Link>
+        <Link to="/terminos" className="underline hover:text-ink">
+          Términos
+        </Link>
+      </nav>
     </div>
   )
 }
