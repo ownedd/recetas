@@ -8,6 +8,7 @@ import { Icon } from '../components/Icon'
 import { ServingsStepper } from '../components/ServingsStepper'
 import { Spinner } from '../components/Spinner'
 import { isSectionHeader, scaleIngredient } from '../lib/ingredients'
+import { errorMessage } from '../lib/errors'
 import { formatMinutes } from '../lib/time'
 import { NotFound } from './NotFound'
 
@@ -19,8 +20,11 @@ export function RecipeDetailPage() {
   const remove = useMutation(api.recipes.remove)
   const [servings, setServings] = useState<number | null>(null)
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const [actionError, setActionError] = useState<string | null>(null)
 
-  if (recipe === undefined) return <Spinner />
+  // Mientras se borra, la consulta puede pasar a null antes de navegar: no mostrar «no encontrada».
+  if (recipe === undefined || (deleting && recipe === null)) return <Spinner />
   if (recipe === null) return <NotFound message="Receta no encontrada" />
 
   const current = servings ?? recipe.servings
@@ -45,7 +49,14 @@ export function RecipeDetailPage() {
             className={`btn-icon ${recipe.favorite ? 'text-saffron' : ''}`}
             aria-label={recipe.favorite ? 'Quitar de favoritas' : 'Marcar como favorita'}
             aria-pressed={recipe.favorite}
-            onClick={() => void toggleFavorite({ id: recipe._id })}
+            onClick={async () => {
+              setActionError(null)
+              try {
+                await toggleFavorite({ id: recipe._id })
+              } catch (e) {
+                setActionError(errorMessage(e))
+              }
+            }}
           >
             <Icon name="star" filled={recipe.favorite} />
           </button>
@@ -57,6 +68,12 @@ export function RecipeDetailPage() {
           </button>
         </div>
       </div>
+
+      {actionError && (
+        <p role="alert" className="mb-5 rounded-xl border border-danger/40 bg-danger/10 px-4 py-3 font-semibold text-danger">
+          {actionError}
+        </p>
+      )}
 
       {recipe.imageUrl && (
         <img src={recipe.imageUrl} alt="" className="mb-6 aspect-[16/10] w-full rounded-card object-cover shadow-card" />
@@ -165,9 +182,15 @@ export function RecipeDetailPage() {
         onCancel={() => setConfirmDelete(false)}
         onConfirm={async () => {
           setConfirmDelete(false)
-          const id = recipe._id
-          navigate('/', { replace: true })
-          await remove({ id })
+          setActionError(null)
+          setDeleting(true)
+          try {
+            await remove({ id: recipe._id })
+            navigate('/', { replace: true })
+          } catch (e) {
+            setDeleting(false)
+            setActionError(errorMessage(e))
+          }
         }}
       />
     </article>

@@ -66,6 +66,7 @@ npm run build
    - `CONVEX_DEPLOY_KEY` = la deploy key del paso 2
    - `VITE_CLERK_PUBLISHABLE_KEY` = `pk_test_…`
    (`VITE_CONVEX_URL` la inyecta `npx convex deploy` durante el build.)
+   - **Despliegues de vista previa (Preview):** Vercel construye cada rama que no es `main` (como `feat/recetario-v1`) con las variables de *Preview*. Sin `CONVEX_DEPLOY_KEY` ahí, esos builds fallan. Elige una opción: en Convex genera una **Preview deploy key** y ponla como `CONVEX_DEPLOY_KEY` solo en *Preview* (cada vista previa tendrá su propio backend temporal), o desactiva las vistas previas en *Settings → Git*. Para la primera vez, lo más simple es fusionar `feat/recetario-v1` en `main` y desplegar desde `main`.
 5. Despliega. El build ejecuta `npx convex deploy --cmd 'npm run build'`: publica las funciones de Convex y compila el frontend.
 6. Comprueba: login, crear una receta con foto, modo cocina, instalar en el móvil y recargar una ruta como `/receta/<id>` sin error 404.
 
