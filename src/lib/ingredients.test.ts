@@ -18,7 +18,6 @@ describe('parseIngredient', () => {
   test('decimales y miles', () => {
     expect(parseIngredient('0,5 kg').quantity).toEqual({ kind: 'single', value: 0.5 })
     expect(parseIngredient('1.5 l').quantity).toEqual({ kind: 'single', value: 1.5 })
-    expect(parseIngredient('1.000 g harina').quantity).toEqual({ kind: 'single', value: 1000 })
   })
   test('rangos', () => {
     expect(parseIngredient('2-3 dientes').quantity).toEqual({ kind: 'range', min: 2, max: 3 })
@@ -70,5 +69,23 @@ describe('scaleIngredient', () => {
     expect(scaleIngredient('Para la salsa:', 2)).toBe('Para la salsa:')
     expect(scaleIngredient('1/0 taza', 2)).toBe('1/0 taza')
     expect(scaleIngredient('500 g carne', 1)).toBe('500 g carne')
+  })
+})
+
+describe('revisión final', () => {
+  test('entero + espacio + fracción unicode', () => {
+    expect(parseIngredient('1 ½ taza').quantity).toEqual({ kind: 'single', value: 1.5 })
+    expect(scaleIngredient('1 ½ taza', 2)).toBe('3 taza')
+    expect(scaleIngredient('2 ½ tazas', 0.5)).toBe('1¼ tazas')
+  })
+  test('0.250 es decimal, no miles', () => {
+    expect(parseIngredient('0.250 kg').quantity).toEqual({ kind: 'single', value: 0.25 })
+    expect(scaleIngredient('0.250 kg', 2)).toBe('½ kg')
+    expect(parseIngredient('0,250 kg').quantity).toEqual({ kind: 'single', value: 0.25 })
+  })
+  test('N.ddd / N,ddd ambiguo (miles o decimal) no se escala', () => {
+    expect(parseIngredient('1.250 kg').quantity).toBeNull()
+    expect(parseIngredient('1,250 kg').quantity).toBeNull()
+    expect(scaleIngredient('1.000 g harina', 2)).toBe('1.000 g harina')
   })
 })

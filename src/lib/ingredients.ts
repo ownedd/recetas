@@ -29,15 +29,16 @@ function readNumber(s: string): NumberRead {
     if (m[2] === '' || den === 0) return 'invalid'
     return { value: Number(m[1]) / den, length: m[0].length }
   }
-  m = /^(\d+)?([¼½¾⅓⅔])/.exec(s)
+  m = /^(?:(\d+)\s*)?([¼½¾⅓⅔])/.exec(s)
   if (m) {
     return { value: (m[1] ? Number(m[1]) : 0) + UNICODE_FRACTIONS[m[2]], length: m[0].length }
   }
   m = /^(\d+)(?:([.,])(\d+))?/.exec(s)
   if (m) {
     let value: number
-    if (m[2] === '.' && m[3].length === 3) value = Number(m[1] + m[3]) // 1.000 = mil
-    else if (m[2]) value = Number(`${m[1]}.${m[3]}`)
+    // "1.250" o "1,250" puede ser miles o decimal según el país: no se adivina.
+    if (m[2] && m[3].length === 3 && Number(m[1]) > 0) return 'invalid'
+    if (m[2]) value = Number(`${m[1]}.${m[3]}`)
     else value = Number(m[1])
     return { value, length: m[0].length }
   }

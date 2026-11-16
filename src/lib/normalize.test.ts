@@ -30,3 +30,11 @@ test('isHttpUrl', () => {
 test('buildSearchText', () => {
   expect(buildSearchText({ title: 'Tortilla', ingredients: ['4 huevos'], tags: ['rápidas'] })).toBe('Tortilla 4 huevos rápidas')
 })
+
+test('normalizeSteps no borra números que forman parte del paso', () => {
+  expect(normalizeSteps('3.5 litros de agua a hervir')).toEqual(['3.5 litros de agua a hervir'])
+  expect(normalizeSteps('1. 3.5 litros de agua')).toEqual(['3.5 litros de agua'])
+  // guardar dos veces no cambia el texto
+  const once = normalizeSteps('1. Mezclar\n2) Hornear 20 min')
+  expect(normalizeSteps(once.join('\n\n'))).toEqual(once)
+})

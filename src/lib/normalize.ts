@@ -1,5 +1,6 @@
 const BULLET = /^[•\-*·–]\s+/
-const STEP_NUMBER = /^(paso\s+\d+\s*[:.)-]?|\d+\s*[.)])\s*/i
+// "1. ", "2) ", "Paso 3: " — exige espacio después y que no siga otro dígito ("3.5 litros" se respeta).
+const STEP_NUMBER = /^(paso\s+\d+\s*[:.)-]?\s*|\d+\s*[.)](?!\d)\s+)/i
 
 function lines(text: string): string[] {
   return text.replace(/\r\n?/g, '\n').split('\n')
