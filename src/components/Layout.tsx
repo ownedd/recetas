@@ -1,6 +1,7 @@
 import { UserButton } from '@clerk/react'
 import { Link, Outlet } from 'react-router'
 import { Icon } from './Icon'
+import { UpdatePrompt } from './UpdatePrompt'
 
 export function Layout() {
   return (
@@ -14,6 +15,7 @@ export function Layout() {
         </Link>
         <UserButton />
       </header>
+      <UpdatePrompt />
       <main>
         <Outlet />
       </main>
