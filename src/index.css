@@ -1,0 +1,103 @@
+@import '@fontsource/young-serif/400.css';
+@import '@fontsource-variable/atkinson-hyperlegible-next/wght.css';
+@import 'tailwindcss';
+
+/* Recetario — "cuaderno de cocina": papel crema, tinta café, acento pimentón. */
+@theme {
+  --font-display: 'Young Serif', ui-serif, Georgia, serif;
+  --font-sans: 'Atkinson Hyperlegible Next Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --color-paper: #f7f0e3;
+  --color-paper-deep: #efe4d0;
+  --color-card: #fffaf1;
+  --color-ink: #2b2018;
+  --color-ink-soft: #6b5a4b;
+  --color-line: #e2d3bb;
+  --color-pimenton: #b8401f;
+  --color-pimenton-deep: #8f2f15;
+  --color-herb: #4f6b3a;
+  --color-saffron: #e9a83a;
+  --color-danger: #a3261b;
+
+  --radius-card: 1.1rem;
+  --shadow-card: 0 1px 0 #e2d3bb, 0 8px 24px -14px rgb(43 32 24 / 0.35);
+
+  --animate-rise: rise 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-paper: #1d1712;
+    --color-paper-deep: #261e17;
+    --color-card: #2a2119;
+    --color-ink: #f3e8d6;
+    --color-ink-soft: #bba78f;
+    --color-line: #3d3026;
+    --color-pimenton: #e0663f;
+    --color-pimenton-deep: #f08a63;
+    --color-herb: #9cbb7f;
+    --color-saffron: #f0bd5c;
+    --color-danger: #ef6f62;
+    --shadow-card: 0 1px 0 #3d3026, 0 10px 28px -16px rgb(0 0 0 / 0.7);
+  }
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    min-height: 100dvh;
+    /* grano de papel muy sutil */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.4 0 0 0 0 0.3 0 0 0 0 0.2 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-saffron);
+    outline-offset: 2px;
+  }
+}
+
+@utility btn {
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 font-semibold transition active:scale-[0.97] disabled:opacity-50;
+}
+@utility btn-primary {
+  @apply btn bg-pimenton text-card shadow-card hover:bg-pimenton-deep;
+}
+@utility btn-ghost {
+  @apply btn border border-line bg-card text-ink hover:bg-paper-deep;
+}
+@utility btn-icon {
+  @apply inline-flex size-11 items-center justify-center rounded-full border border-line bg-card text-ink transition hover:bg-paper-deep active:scale-95;
+}
+@utility field {
+  @apply w-full rounded-xl border border-line bg-card px-4 py-3 text-ink placeholder:text-ink-soft/70 focus:border-pimenton focus:outline-none;
+}
+@utility label {
+  @apply mb-1.5 block text-sm font-semibold tracking-wide text-ink-soft uppercase;
+}
+@utility chip {
+  @apply inline-flex min-h-9 items-center rounded-full border border-line bg-card px-3.5 text-sm font-semibold text-ink-soft transition;
+}
+@utility chip-active {
+  @apply border-herb bg-herb text-card;
+}
